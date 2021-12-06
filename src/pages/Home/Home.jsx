@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table } from "antd";
-import axios from "axios";
+
+import { getProducts } from "../../services/product.sevice";
 
 import "./Home.css";
 
@@ -46,18 +47,13 @@ const Home = () => {
     setLoading(true);
 
     (async () => {
-      const { data } = await axios.get(
-        "https://streamr.network/api/v1/products",
-        {
-          params: {
-            ...defaultParams,
-            max: limit,
-            offset: limit * (page - 1),
-            order,
-            sortBy,
-          },
-        }
-      );
+      const data = await getProducts({
+        ...defaultParams,
+        max: limit,
+        offset: limit * (page - 1),
+        order,
+        sortBy,
+      });
       setLoading(false);
       setData(data.map((dt) => ({ ...dt, key: dt.id })));
     })();
